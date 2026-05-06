@@ -1,7 +1,7 @@
-import { ICreateUserDTO } from "../dtos/ICreateUserDTO.js";
-import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO.js";
-import { IUsers } from "../interfaces/users.interface.js";
-import { IUsersRepository } from "../interfaces/users.repository.interface.js";
+import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
+import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
+import { IUsers } from "../interfaces/users.interface";
+import { IUsersRepository } from "../interfaces/users.repository.interface";
 
 export class UserRepository implements IUsersRepository {
     findAll(): Promise<IUsers[]> {

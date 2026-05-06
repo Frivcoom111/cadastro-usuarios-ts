@@ -1,6 +1,6 @@
-import { ICreateUserDTO } from "../dtos/ICreateUserDTO.js";
-import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO.js";
-import { IUsers } from "./users.interface.js";
+import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
+import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
+import { IUsers } from "./users.interface";
 
 export interface IUsersRepository {
   findAll(): Promise<IUsers[]>;

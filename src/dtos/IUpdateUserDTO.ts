@@ -1,3 +1,3 @@
-import { ICreateUserDTO } from "./ICreateUserDTO.js"
+import { ICreateUserDTO } from "./ICreateUserDTO"
 
 export interface IUpdateUserDTO extends Partial<ICreateUserDTO> {}

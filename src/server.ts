@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import "dotenv/config";
-import app from "./app.js";
-import { getRequiredEnv } from "./utils/getRequiredEnv.js";
-import AppDataSource from "./config/database.js";
+import app from "./app";
+import { getRequiredEnv } from "./utils/getRequiredEnv";
+import AppDataSource from "./config/database";
 
 const PORT = getRequiredEnv("PORT");
 
