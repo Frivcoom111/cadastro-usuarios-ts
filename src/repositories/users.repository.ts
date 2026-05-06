@@ -1,26 +1,37 @@
+import { Repository } from "typeorm";
 import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
 import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
 import { IUsers } from "../interfaces/users.interface";
 import { IUsersRepository } from "../interfaces/users.repository.interface";
+import { User } from "../entities/users.entity";
+import AppDataSource from "../config/database";
 
 export class UserRepository implements IUsersRepository {
-    findAll(): Promise<IUsers[]> {
-        
+    private repository: Repository<User>
+
+    constructor() {
+        this.repository = AppDataSource.getRepository(User);
     }
 
-    findById(id: string): Promise<IUsers | null> {
-        
+    async findAll(): Promise<IUsers[]> {
+        return this.repository.find();
     }
 
-    create(data: ICreateUserDTO): Promise<IUsers> {
-        
+    async findById(id: string): Promise<IUsers | null> {
+        return this.repository.findOne({ where: { id } });
     }
 
-    update(id: string, data: IUpdateUserDTO): Promise<IUsers | null> {
-        
+    async create(data: ICreateUserDTO): Promise<IUsers> {
+        const user = this.repository.create(data);
+        return await this.repository.save(user);
     }
 
-    delete(id: string): Promise<void> {
-        
+    async update(id: string, data: IUpdateUserDTO): Promise<IUsers | null> {
+        await this.repository.update(id, data);
+        return await this.repository.findOne({ where: { id } });
+    }
+
+    async delete(id: string): Promise<void> {
+        await this.repository.delete(id)
     }
 }
