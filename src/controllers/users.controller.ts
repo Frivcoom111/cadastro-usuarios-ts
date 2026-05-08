@@ -1,20 +1,101 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/users.service";
+import {
+  createUserSchema,
+  updateUserSchema,
+} from "../validators/usersValidators";
+import { IUsers } from "../interfaces/users.interface";
+import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
+import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
 
 export class UserController {
-    private userService: UserService;
+  private userService: UserService;
 
-    constructor() {
-        this.userService = new UserService();
+  constructor() {
+    this.userService = new UserService();
+  }
+
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await this.userService.findAll();
+
+      res
+        .status(200)
+        .json({ message: "Usuários listados com sucesso.", users });
+    } catch (error) {
+      next(error);
     }
+  }
 
-    async findAll(req: Request, res: Response, next: NextFunction) {
-        try {
-            const users = await this.userService.findAll();
+  async findById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id as string;
 
-            res.status(200).json({ message: "Usuário listados com sucesso.", users })
-        } catch (error) {
-            next(error);
-        }
+      const user = await this.userService.findById(id);
+
+      res
+        .status(200)
+        .json({ message: "Usuário encontrado com sucesso. ", user });
+    } catch (error) {
+      next(error);
     }
+  }
+
+  async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validation = createUserSchema.safeParse(req.body);
+
+      if (!validation.success) {
+        res.status(404).json({ error: validation.error.format() });
+      }
+
+      const data = validation.data as ICreateUserDTO;
+
+      const userCreated = await this.userService.create(data);
+
+      if (!userCreated) {
+        res.status(400).json({ erro: "Erro ao criar usuário." });
+      }
+
+      res
+        .status(201)
+        .json({ message: "Usuário criado com sucesso.", user: userCreated });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validation = updateUserSchema.safeParse(req.body);
+      const id = req.query.id as string;
+
+      if (!validation.success) {
+        res.status(404).json({ error: validation.error.format() });
+      }
+
+      const data = validation.data as IUpdateUserDTO;
+
+      const updatedUser = await this.userService.update(id, data);
+
+      res.status(200).json({
+        message: "Usuário atualizado com sucesso.",
+        user: updatedUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.query.id as string;
+
+      await this.userService.delete(id);
+
+      res.status(200).json({ message: "Usuário deletado com sucesso." });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
