@@ -1,4 +1,4 @@
-import z, { length } from "zod";
+import z from "zod";
 
 export const createUserSchema = z.object({
   name: z
@@ -13,7 +13,6 @@ export const createUserSchema = z.object({
   age: z
     .number({ error: "Idade deve ser um número." })
     .int("Idade deve ser um número inteiro.")
-    .positive()
     .min(1, "Idade mínima é 1.")
     .max(120, "Idade máxima é 120."),
 });

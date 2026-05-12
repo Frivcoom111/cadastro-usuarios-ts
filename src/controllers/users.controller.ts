@@ -4,7 +4,6 @@ import {
   createUserSchema,
   updateUserSchema,
 } from "../validators/usersValidators";
-import { IUsers } from "../interfaces/users.interface";
 import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
 import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
 
@@ -19,9 +18,7 @@ export class UserController {
     try {
       const users = await this.userService.findAll();
 
-      res
-        .status(200)
-        .json({ message: "Usuários listados com sucesso.", users });
+      res.status(200).json({ message: "Usuários listados com sucesso.", users });
     } catch (error) {
       next(error);
     }
@@ -33,9 +30,7 @@ export class UserController {
 
       const user = await this.userService.findById(id);
 
-      res
-        .status(200)
-        .json({ message: "Usuário encontrado com sucesso. ", user });
+      res.status(200).json({ message: "Usuário encontrado com sucesso.", user });
     } catch (error) {
       next(error);
     }
@@ -46,20 +41,14 @@ export class UserController {
       const validation = createUserSchema.safeParse(req.body);
 
       if (!validation.success) {
-        res.status(404).json({ error: validation.error.format() });
+        return res.status(400).json({ error: validation.error.format() });
       }
 
       const data = validation.data as ICreateUserDTO;
 
       const userCreated = await this.userService.create(data);
 
-      if (!userCreated) {
-        res.status(400).json({ erro: "Erro ao criar usuário." });
-      }
-
-      res
-        .status(201)
-        .json({ message: "Usuário criado com sucesso.", user: userCreated });
+      res.status(201).json({ message: "Usuário criado com sucesso.", user: userCreated });
     } catch (error) {
       next(error);
     }
@@ -67,21 +56,18 @@ export class UserController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const validation = updateUserSchema.safeParse(req.body);
       const id = req.query.id as string;
+      const validation = updateUserSchema.safeParse(req.body);
 
       if (!validation.success) {
-        res.status(404).json({ error: validation.error.format() });
+        return res.status(400).json({ error: validation.error.format() });
       }
 
       const data = validation.data as IUpdateUserDTO;
 
       const updatedUser = await this.userService.update(id, data);
 
-      res.status(200).json({
-        message: "Usuário atualizado com sucesso.",
-        user: updatedUser,
-      });
+      res.status(200).json({ message: "Usuário atualizado com sucesso.", user: updatedUser });
     } catch (error) {
       next(error);
     }
