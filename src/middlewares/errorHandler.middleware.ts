@@ -2,12 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { AppError } from "../errors/AppError";
 
-export function errorHandler(
-  error: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
+export const errorHandler = ( error: Error, req: Request, res: Response, next: NextFunction): void => {
   if (error instanceof AppError) {
     res.status(error.statusCode).json({ error: error.message });
     return;
@@ -20,4 +15,4 @@ export function errorHandler(
 
   console.error(error);
   res.status(500).json({ error: "Erro interno do servidor." });
-}
+};

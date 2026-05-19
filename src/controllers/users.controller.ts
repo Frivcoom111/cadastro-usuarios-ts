@@ -38,13 +38,7 @@ export class UserController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const validation = createUserSchema.safeParse(req.body);
-
-      if (!validation.success) {
-        return res.status(400).json({ error: validation.error.format() });
-      }
-
-      const data = validation.data as ICreateUserDTO;
+      const data: ICreateUserDTO = createUserSchema.parse(req.body);
 
       const userCreated = await this.userService.create(data);
 
@@ -57,13 +51,7 @@ export class UserController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.query.id as string;
-      const validation = updateUserSchema.safeParse(req.body);
-
-      if (!validation.success) {
-        return res.status(400).json({ error: validation.error.format() });
-      }
-
-      const data = validation.data as IUpdateUserDTO;
+      const data: IUpdateUserDTO = updateUserSchema.parse(req.body);
 
       const updatedUser = await this.userService.update(id, data);
 
