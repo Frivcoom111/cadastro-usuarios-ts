@@ -15,6 +15,11 @@ export const createUserSchema = z.object({
     .int("Idade deve ser um número inteiro.")
     .min(1, "Idade mínima é 1.")
     .max(120, "Idade máxima é 120."),
+  phone: z
+    .string()
+    .regex(/^\d+$/, "Telefone deve conter apenas dígitos.")
+    .min(10, "Mínimo 10 dígitos.")
+    .max(11, "Máximo 11 dígitos."),
 });
 
 export const updateUserSchema = createUserSchema

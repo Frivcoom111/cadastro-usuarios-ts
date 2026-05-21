@@ -6,3 +6,5 @@ database.sqlite
 .code-review-graph/
 .mcp.json
 .claude
+claude.md
+.kiro

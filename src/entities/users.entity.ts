@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("users")
 export class User {
@@ -16,6 +22,9 @@ export class User {
 
   @Column()
   age!: number;
+
+  @Column({ unique: true })
+  phone!: string;
 
   @CreateDateColumn()
   createdAt!: Date;
