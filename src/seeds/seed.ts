@@ -1,5 +1,6 @@
 import AppDataSource from "../config/database";
 import { User } from "../entities/users.entity";
+import { generateHash } from "../utils/generateHash";
 
 const seed = async () => {
   await AppDataSource.initialize();
@@ -38,8 +39,10 @@ const seed = async () => {
       },
     });
 
+    const hashPassword = await generateHash(userData.password);
+
     if (!exists) {
-      const user = userRepo.create(userData);
+      const user = userRepo.create({ ...userData, password: hashPassword });
       await userRepo.save(user);
 
       console.log(`✅ Usuário ${userData.name} criado`);
