@@ -1,75 +1,72 @@
-import { Request, Response, NextFunction } from "express";
-import { UserService } from "../services/users.service";
-import {
-  createUserSchema,
-  updateUserSchema,
-} from "../validators/usersValidators";
-import { ICreateUserDTO } from "../dtos/ICreateUserDTO";
-import { IUpdateUserDTO } from "../dtos/IUpdateUserDTO";
+import type { NextFunction, Request, Response } from "express"
+import type { ICreateUserDTO } from "../dtos/ICreateUserDTO"
+import type { IUpdateUserDTO } from "../dtos/IUpdateUserDTO"
+import { UserService } from "../services/users.service"
+import { createUserSchema, updateUserSchema } from "../validators/usersValidators"
 
 export class UserController {
-  private userService: UserService;
+  private userService: UserService
 
   constructor() {
-    this.userService = new UserService();
+    this.userService = new UserService()
   }
 
-  async findAll(req: Request, res: Response, next: NextFunction) {
+  async findAll(_req: Request, res: Response, next: NextFunction) {
     try {
-      const users = await this.userService.findAll();
+      const users = await this.userService.findAll()
 
-      res.status(200).json({ message: "Usuários listados com sucesso.", users });
+      res.status(200).json({ message: "Usuários listados com sucesso.", users })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
   async findById(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.params.id as string;
+      const id = req.params.id as string
 
-      const user = await this.userService.findById(id);
+      const user = await this.userService.findById(id)
 
-      res.status(200).json({ message: "Usuário encontrado com sucesso.", user });
+      res.status(200).json({ message: "Usuário encontrado com sucesso.", user })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const data: ICreateUserDTO = createUserSchema.parse(req.body);
+      const data: ICreateUserDTO = createUserSchema.parse(req.body)
 
-      const userCreated = await this.userService.create(data);
+      const userCreated = await this.userService.create(data)
 
-      res.status(201).json({ message: "Usuário criado com sucesso.", user: userCreated });
+      res.status(201).json({ message: "Usuário criado com sucesso.", user: userCreated })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.query.id as string;
-      const data: IUpdateUserDTO = updateUserSchema.parse(req.body);
+      const id = req.query.id as string
+      const data: IUpdateUserDTO = updateUserSchema.parse(req.body)
 
-      const updatedUser = await this.userService.update(id, data);
+      const updatedUser = await this.userService.update(id, data)
 
-      res.status(200).json({ message: "Usuário atualizado com sucesso.", user: updatedUser });
+      res.status(200).json({ message: "Usuário atualizado com sucesso.", user: updatedUser })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.query.id as string;
+      const id = req.query.id as string
 
-      await this.userService.delete(id);
+      await this.userService.delete(id)
 
-      res.status(200).json({ message: "Usuário deletado com sucesso." });
+      res.status(200).json({ message: "Usuário deletado com sucesso." })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 }

@@ -1,11 +1,11 @@
-import AppDataSource from "../config/database";
-import { User } from "../entities/users.entity";
-import { generateHash } from "../utils/generateHash";
+import AppDataSource from "../config/database"
+import { User } from "../entities/users.entity"
+import { generateHash } from "../utils/generateHash"
 
 const seed = async () => {
-  await AppDataSource.initialize();
+  await AppDataSource.initialize()
 
-  const userRepo = AppDataSource.getRepository(User);
+  const userRepo = AppDataSource.getRepository(User)
 
   const users = [
     {
@@ -29,7 +29,7 @@ const seed = async () => {
       age: 30,
       phone: "44920009154",
     },
-  ];
+  ]
 
   for (const userData of users) {
     const exists = await userRepo.findOne({
@@ -37,22 +37,22 @@ const seed = async () => {
         email: userData.email,
         phone: userData.phone,
       },
-    });
+    })
 
-    const hashPassword = await generateHash(userData.password);
+    const hashPassword = await generateHash(userData.password)
 
     if (!exists) {
-      const user = userRepo.create({ ...userData, password: hashPassword });
-      await userRepo.save(user);
+      const user = userRepo.create({ ...userData, password: hashPassword })
+      await userRepo.save(user)
 
-      console.log(`✅ Usuário ${userData.name} criado`);
+      console.log(`✅ Usuário ${userData.name} criado`)
     } else {
-      console.log(`⚠️ ${userData.name} já existe, pulando...`);
+      console.log(`⚠️ ${userData.name} já existe, pulando...`)
     }
   }
 
-  AppDataSource.destroy();
-  console.log("🌱 Seed finalizado!");
-};
+  AppDataSource.destroy()
+  console.log("🌱 Seed finalizado!")
+}
 
-seed().catch(console.error);
+seed().catch(console.error)

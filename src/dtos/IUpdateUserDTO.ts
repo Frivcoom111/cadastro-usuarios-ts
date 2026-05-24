@@ -1,3 +1,3 @@
-import { ICreateUserDTO } from "./ICreateUserDTO"
+import type { ICreateUserDTO } from "./ICreateUserDTO"
 
 export interface IUpdateUserDTO extends Partial<ICreateUserDTO> {}
