@@ -1,8 +1,13 @@
 import type { NextFunction, Request, Response } from "express"
-import type { ICreateUserDTO } from "../dtos/ICreateUserDTO"
-import type { IUpdateUserDTO } from "../dtos/IUpdateUserDTO"
 import { UserService } from "../services/users.service"
-import { createUserSchema, updateUserSchema } from "../validators/usersValidators"
+import {
+  createUserSchema,
+  type ICreateUserInput,
+  type IdParamsInput,
+  type IUpdateUserInput,
+  idParams,
+  updateUserSchema,
+} from "../validators/usersValidators"
 
 export class UserController {
   private userService: UserService
@@ -23,9 +28,9 @@ export class UserController {
 
   async findById(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.params.id as string
+      const validation: IdParamsInput = idParams.parse({ id: req.params.id })
 
-      const user = await this.userService.findById(id)
+      const user = await this.userService.findById(validation.id)
 
       res.status(200).json({ message: "Usuário encontrado com sucesso.", user })
     } catch (error) {
@@ -35,7 +40,7 @@ export class UserController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const data: ICreateUserDTO = createUserSchema.parse(req.body)
+      const data: ICreateUserInput = createUserSchema.parse(req.body)
 
       const userCreated = await this.userService.create(data)
 
@@ -47,10 +52,10 @@ export class UserController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.query.id as string
-      const data: IUpdateUserDTO = updateUserSchema.parse(req.body)
+      const validation: IdParamsInput = idParams.parse({ id: req.params.id })
+      const data: IUpdateUserInput = updateUserSchema.parse(req.body)
 
-      const updatedUser = await this.userService.update(id, data)
+      const updatedUser = await this.userService.update(validation.id, data)
 
       res.status(200).json({ message: "Usuário atualizado com sucesso.", user: updatedUser })
     } catch (error) {
@@ -60,9 +65,9 @@ export class UserController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.query.id as string
+      const validation = idParams.parse({ id: req.params.id })
 
-      await this.userService.delete(id)
+      await this.userService.delete(validation.id)
 
       res.status(200).json({ message: "Usuário deletado com sucesso." })
     } catch (error) {

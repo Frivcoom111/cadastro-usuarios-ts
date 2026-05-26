@@ -12,7 +12,9 @@
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts",
     "migration:show": "typeorm-ts-node-commonjs migration:show -d src/config/database.ts",
     "seed:run": "ts-node src/seeds/seed.ts",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "check": "biome check --write",
+    "lint": "biome lint --write"
   },
   "keywords": [],
   "author": "",

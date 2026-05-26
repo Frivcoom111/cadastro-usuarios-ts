@@ -1,9 +1,8 @@
-import type { ICreateUserDTO } from "../dtos/ICreateUserDTO"
-import type { IUpdateUserDTO } from "../dtos/IUpdateUserDTO"
-import { AppError } from "../errors/AppError"
 import type { IUserResponse } from "../interfaces/users.interface"
 import { UserRepository } from "../repositories/users.repository"
 import { generateHash } from "../utils/generateHash"
+import { AppError } from "../validators/AppError"
+import type { ICreateUserInput, IUpdateUserInput } from "../validators/usersValidators"
 
 export class UserService {
   private userRepository: UserRepository
@@ -24,7 +23,7 @@ export class UserService {
     return user
   }
 
-  async create(data: ICreateUserDTO): Promise<IUserResponse> {
+  async create(data: ICreateUserInput): Promise<IUserResponse> {
     const existingUser = await this.userRepository.findByEmail(data.email)
     if (existingUser) throw new AppError("E-mail já cadastrado.", 409)
 
@@ -37,7 +36,7 @@ export class UserService {
     return userCreated
   }
 
-  async update(id: string, data: IUpdateUserDTO): Promise<IUserResponse> {
+  async update(id: string, data: IUpdateUserInput): Promise<IUserResponse> {
     const user = await this.userRepository.findById(id)
     if (!user) throw new AppError("Usuário não encontrado.", 404)
 

@@ -1,10 +1,9 @@
 import type { Repository } from "typeorm"
 import AppDataSource from "../config/database"
-import type { ICreateUserDTO } from "../dtos/ICreateUserDTO"
-import type { IUpdateUserDTO } from "../dtos/IUpdateUserDTO"
 import { User } from "../entities/users.entity"
 import type { IUserResponse } from "../interfaces/users.interface"
 import type { IUsersRepository } from "../interfaces/users.repository.interface"
+import type { ICreateUserInput, IUpdateUserInput } from "../validators/usersValidators"
 
 const userSelect = {
   id: true,
@@ -35,7 +34,7 @@ export class UserRepository implements IUsersRepository {
     })
   }
 
-  async create(data: ICreateUserDTO): Promise<IUserResponse | null> {
+  async create(data: ICreateUserInput): Promise<IUserResponse | null> {
     const saved = await this.repository.save(this.repository.create(data))
 
     return await this.repository.findOne({
@@ -44,7 +43,7 @@ export class UserRepository implements IUsersRepository {
     })
   }
 
-  async update(id: string, data: IUpdateUserDTO): Promise<IUserResponse | null> {
+  async update(id: string, data: IUpdateUserInput): Promise<IUserResponse | null> {
     await this.repository.update(id, data)
     return await this.repository.findOne({ where: { id }, select: userSelect })
   }

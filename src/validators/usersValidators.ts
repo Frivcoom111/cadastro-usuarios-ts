@@ -21,3 +21,11 @@ export const updateUserSchema = createUserSchema
   .refine((data) => Object.keys(data).length > 0, {
     message: "Nenhum campo para atualizar.",
   })
+
+export const idParams = z.object({
+  id: z.string().uuid("ID inválido."),
+})
+
+export type ICreateUserInput = z.infer<typeof createUserSchema>
+export type IUpdateUserInput = z.infer<typeof updateUserSchema>
+export type IdParamsInput = z.infer<typeof idParams>
